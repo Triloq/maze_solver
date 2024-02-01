@@ -13,8 +13,7 @@ def main():
 
     # win.wait_for_close()
 
-    maze = Maze(30, 30, 5, 6, 150, 150, win)
-    maze._create_cells()
+    maze = Maze(100, 100, 20, 20, 30, 30, win)
     win.wait_for_close()
     
 
