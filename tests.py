@@ -29,12 +29,18 @@ class Tests(unittest.TestCase):
             num_rows,
         )
 
-    # def test_cell_properties(self):
-    #     m1 = Maze(0, 0, 5, 5, 10, 10)
-    #     cell = m1._cells[0][0]
-    #     self.assertEqual(cell._x1, 0)
-    #     self.assertEqual(cell._y1, 0)
-    #     self.assertFalse(cell.visited)
+    def test_cell_properties(self):
+        m1 = Maze(0, 0, 5, 5, 10, 10)
+        cell = m1._cells[0][0]
+        self.assertEqual(cell._x1, 0)
+        self.assertEqual(cell._y1, 0)
+
+    def test_ent_exit_walls(self):
+        m1 = Maze(0, 0, 10, 10, 15, 15)
+        ent = m1._cells[0][0]
+        exit = m1._cells[9][9]
+        self.assertEqual(ent.has_top_wall, False)
+        self.assertEqual(ent.has_bottom_wall, False)
 
 if __name__ == "__main__":
     unittest.main()
