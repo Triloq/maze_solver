@@ -1,7 +1,6 @@
 from cell import Cell
 import time
 import random
-import numpy as np
 
 class Maze:
     def __init__(
@@ -28,6 +27,7 @@ class Maze:
         self._create_cells()
         self._break_entrance_and_exit()     
         self._break_walls_r(0,0)   
+        self._cells[len(self._cells)//2][len(self._cells[0])//2].visited = True
         self._reset_cells_visited()
         
     def _create_cells(self):
@@ -114,3 +114,55 @@ class Maze:
         for i in range(len(self._cells)):
             for j in range(len(self._cells[i])):
                 self._cells[i][j].visited = False
+
+    def solve(self):
+        return self._solve_r()
+
+    def _solve_r(self, i=0, j=0):
+    
+        m, n = len(self._cells)-1, len(self._cells[0])-1
+        self._animate()
+        self._cells[i][j].visited = True
+
+        if self._cells[i][j] == self._cells[m][n]:
+            return True
+        
+        if self._can_go_to(i+1,j, 'right'):
+            self._cells[i][j].draw_move(self._cells[i+1][j])
+            if self._solve_r(i+1,j):
+                return True
+            self._cells[i][j].draw_move(self._cells[i+1][j], undo=True)
+        if self._can_go_to(i-1,j, 'left'):
+            self._cells[i][j].draw_move(self._cells[i-1][j])
+            if self._solve_r(i-1,j):
+                return True
+            self._cells[i][j].draw_move(self._cells[i-1][j], undo=True)
+        if self._can_go_to(i,j+1, 'down'):
+            self._cells[i][j].draw_move(self._cells[i][j+1])
+            if self._solve_r(i,j+1):
+                return True
+            self._cells[i][j].draw_move(self._cells[i][j+1], undo=True)
+        if self._can_go_to(i,j-1, 'up'):
+            self._cells[i][j].draw_move(self._cells[i][j-1])
+            if self._solve_r(i,j-1):
+                return True
+            self._cells[i][j].draw_move(self._cells[i][j-1], undo=True)        
+        return False
+
+    def _can_go_to(self, i, j, direction):
+        if i < 0 or i > len(self._cells)-1 or j < 0 or j > len(self._cells[0])-1:
+            # cell is out of bounds
+            return False
+        elif self._cells[i][j].visited:
+            # cell has been visited already
+            return False 
+        
+        if direction == 'right' and self._cells[i][j].has_left_wall:
+            return False
+        if direction == 'left' and self._cells[i][j].has_right_wall:
+            return False
+        if direction == 'up' and self._cells[i][j].has_bottom_wall:
+            return False
+        if direction == 'down' and self._cells[i][j].has_top_wall:
+            return False
+        return True

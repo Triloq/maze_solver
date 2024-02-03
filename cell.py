@@ -78,7 +78,7 @@ class Cell():
             self._win.draw_line(line2, fill)
 
         # down
-        elif self._y1 > to_cell._y1:
+        elif self._y1 < to_cell._y1:
             line1 = Line(Point(x_s, y_s), Point(x_s, self._y2))
             line2 = Line(Point(x_t, y_t), Point(x_t, to_cell._y1))
             self._win.draw_line(line1, fill)
